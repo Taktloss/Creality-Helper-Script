@@ -133,6 +133,10 @@ function set_paths() {
   TIMELAPSE_FILE="${USR_DATA}/moonraker/moonraker/moonraker/components/timelapse.py"
   TIMELAPSE_URL1="${HS_FILES}/moonraker-timelapse/timelapse.py"
   TIMELAPSE_URL2="${HS_FILES}/moonraker-timelapse/timelapse.cfg"
+  TIMELAPSE_FOLDER="${PRINTER_DATA_FOLDER}/timelapse"
+  CREALITY_TIMELAPSE_FOLDER="${USR_DATA}/creality/userdata/delay_image/video"
+  CREALITY_TIMELAPSE_LINK="${TIMELAPSE_FOLDER}/creality"
+  TIMELAPSE_SETTINGS_API="http://localhost:7125/machine/timelapse/settings"
   
   # Camera Settings Control #
   CAMERA_SETTINGS_FILE="${HS_CONFIG_FOLDER}/camera-settings.cfg"

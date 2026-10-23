@@ -17,18 +17,23 @@ function tools_menu_ui_k1() {
   menu_option ' 6' 'Fix' 'internal camera (Firmware 1.3.5.22+)'
   menu_option ' 7' 'Remove fix' 'internal camera'
   hr
-  menu_option ' 8' 'Restart' 'Nginx service'
-  menu_option ' 9' 'Restart' 'Moonraker service'
-  menu_option '10' 'Restart' 'Klipper service'
+  menu_option ' 8' 'Show' 'Creality timelapses in Fluidd/Mainsail'
+  menu_option ' 9' 'Hide' 'Creality timelapses in Fluidd/Mainsail'
+  menu_option '10' 'Enable' 'Moonraker Timelapse recording'
+  menu_option '11' 'Disable' 'Moonraker Timelapse recording'
   hr
-  menu_option '11' 'Update' 'Entware packages'
+  menu_option '12' 'Restart' 'Nginx service'
+  menu_option '13' 'Restart' 'Moonraker service'
+  menu_option '14' 'Restart' 'Klipper service'
   hr
-  menu_option '12' 'Clear' 'cache'
-  menu_option '13' 'Clear' 'logs files'
+  menu_option '15' 'Update' 'Entware packages'
   hr
-  menu_option '14' 'Restore' 'a previous firmware'
+  menu_option '16' 'Clear' 'cache'
+  menu_option '17' 'Clear' 'logs files'
   hr
-  menu_option '15' 'Reset' 'factory settings'
+  menu_option '18' 'Restore' 'a previous firmware'
+  hr
+  menu_option '19' 'Reset' 'factory settings'
   hr
   inner_line
   hr
@@ -87,36 +92,64 @@ function tools_menu_k1() {
           run "remove_camera_fix" "tools_menu_ui_k1"
         fi;;
       8)
+        if [ ! -d "$CREALITY_TIMELAPSE_FOLDER" ]; then
+          error_msg "No Creality timelapses folder found!"
+        elif [ -L "$CREALITY_TIMELAPSE_LINK" ]; then
+          error_msg "Creality timelapses are already shown!"
+        elif [ ! -f "$TIMELAPSE_FILE" ]; then
+          error_msg "Moonraker Timelapse is needed, please install it first!"
+        else
+          run "show_creality_timelapses" "tools_menu_ui_k1"
+        fi;;
+      9)
+        if [ ! -L "$CREALITY_TIMELAPSE_LINK" ]; then
+          error_msg "Creality timelapses are already hidden!"
+        else
+          run "hide_creality_timelapses" "tools_menu_ui_k1"
+        fi;;
+      10)
+        if [ ! -f "$TIMELAPSE_FILE" ]; then
+          error_msg "Moonraker Timelapse is needed, please install it first!"
+        else
+          run "enable_moonraker_timelapse_recording" "tools_menu_ui_k1"
+        fi;;
+      11)
+        if [ ! -f "$TIMELAPSE_FILE" ]; then
+          error_msg "Moonraker Timelapse is not installed!"
+        else
+          run "disable_moonraker_timelapse_recording" "tools_menu_ui_k1"
+        fi;;
+      12)
         if [ ! -d "$NGINX_FOLDER" ]; then
           error_msg "Nginx is not installed!"
         else
           run "restart_nginx_action" "tools_menu_ui_k1"
         fi;;
-      9)
+      13)
         if [ ! -d "$MOONRAKER_FOLDER" ]; then
           error_msg "Moonraker is not installed!"
         else
           run "restart_moonraker_action" "tools_menu_ui_k1"
         fi;;
-      10)
+      14)
         if [ ! -f "$INITD_FOLDER"/S55klipper_service ]; then
           error_msg "Klipper service is not present!"
         else
           run "restart_klipper_action" "tools_menu_ui_k1"
         fi;;
-      11)
+      15)
         if [ ! -f "$ENTWARE_FILE" ]; then
           error_msg "Entware is not installed!"
         else
           run "update_entware_packages" "tools_menu_ui_k1"
         fi;;
-      12)
+      16)
         run "clear_cache" "tools_menu_ui_k1";;
-      13)
+      17)
         run "clear_logs" "tools_menu_ui_k1";;
-      14)
+      18)
         run "restore_previous_firmware" "tools_menu_ui_k1";;
-      15)
+      19)
         run "reset_factory_settings" "tools_menu_ui_k1";;
       B|b)
         clear; main_menu; break;;
